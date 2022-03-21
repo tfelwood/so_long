@@ -1,0 +1,3 @@
+/Users/tfelwood/CLionProjects/so_long/mlx/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/Users/tfelwood/CLionProjects/so_long/mlx/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/tfelwood/CLionProjects/so_long/mlx/cmake-build-debug/CMakeFiles/mlx.dir
