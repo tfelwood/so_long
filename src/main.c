@@ -74,8 +74,7 @@ int main(int argc, char **argv)
 	ft_memset(&map, 0, sizeof(map));
 	if (argc != 2)
 		error = BAD_ARGS;
-	error = ft_check_file_format(argv[1]);
-	if (!error)
+	if (error == NO_ERROR && ft_check_file_format(argv[1]) == NO_ERROR)
 	{
 		fd = open(argv[1], O_RDONLY);
 		if (fd < 0)
