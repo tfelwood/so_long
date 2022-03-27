@@ -27,7 +27,7 @@ static enum e_errors ft_check_input(struct s_map *map, char *str)
 	{
 		if (map->flags.is_wall && str[i] != WALL)
 			map->flags.is_wall = 0;
-		if (str[i] == PLAYER)
+		if (str[i] == PLAYER) // TODO similar for COLLECTIBLE & EXIT 
 			++map->flags.player;
 		if (!ft_is_map_symbol(str[i]))
 			err = MAP_BAD_ALPH;
