@@ -28,7 +28,7 @@ typedef struct s_buffer
 	long long	amount;
 }	t_buffer;
 
-size_t	ft_strlen(char const *s);
-char	*ft_strjoin(char *s1, const t_buffer *buf);
+size_t	ft_strlength(char const *s);
+char	*ft_strjoiner(char *s1, const t_buffer *buf);
 char	*get_next_line(int fd);
 #endif

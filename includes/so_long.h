@@ -14,6 +14,16 @@
 # define EXIT 'E'
 # define COLLECTIBLE 'C'
 # define SPACE '0'
+# define ENEMY  'X'
+# define ERR_NUM 14
+# define IMG_NUM 5
+# define SPR_NUM 40
+# define GAME_NAME "so long"
+# define IMG_SIZE  100
+# define SPR_PATH "./test_textures/water/100/"
+# define IM_PATH "./test_textures/"
+# define EXT ".xpm"
+# define INTERVAL 300
 
 enum	e_errors
 {
@@ -27,30 +37,90 @@ enum	e_errors
 	MAP_BAD_PLAYER,
 	MAP_BAD_EXIT,
 	MAP_BAD_COLLECTIBLE,
+	BAD_ALLOC,
+	EMPTY_FILE,
+	MLX_ERROR,
+	SCREEN_ERROR,
 };
+
+enum	e_images
+{
+	WALL_IM,
+	COLL_IM,
+	PLAYER_IM,
+	EXIT_IM,
+	ENEMY_IM,
+};
+
+typedef enum	e_keycodes
+{
+	ESC				= 0x35,
+	L_ARROW			= 0x7B,
+	R_ARROW			= 0x7C,
+	DOWN_ARROW		= 0x7D,
+	UP_ARROW		= 0x7E,
+	KEY_W			= 0x0D,
+	KEY_A			= 0x00,
+	KEY_S			= 0x01,
+	KEY_D			= 0x02,
+} t_keycodes;
 
 struct	s_flags
 {
-	char	player;
-	char	collectible;
-	char	exit;
+	int		player;
+	int		enemy;
+	int		collectible;
+	int		exit;
 	char	is_wall;
 };
 
+typedef struct s_cell
+{
+	int				pos;
+	struct s_cell	*parent;
+	int				beg_way;
+	int 			all_way;
+	struct s_cell	*next;
+} t_cell;
+
 struct	s_map
 {
-	size_t			width;
-	size_t			length;
+	int			width;
+	int			length;
 	struct s_flags	flags;
 	char			*field;
+	t_cell			*cond;
+	int 			plr_pos;
+	int 			enm_pos;
 };
 
+struct s_game
+{
+	struct s_map	*map;
+	size_t			move;
+	void			*mlx_ptr;
+	void			*mlx_win_ptr;
+	int 			cur_sprite;
+	void			*mlx_img[IMG_NUM];
+	void			*spr_img[SPR_NUM];
+
+};
 
 void			ft_putstr_fd(const char *s, int fd);
 size_t			ft_strlen(const char *str);
 void			*ft_memset(void *b, int c, size_t len);
 char			*ft_strjoin(char const *s1, char const *s2);
+char			*ft_itoa(int n);
+void			ft_putnbr_fd(int n, int fd);
 int				ft_strcmp(const char *s1, const char *s2);
+int				ft_check_errors(enum e_errors err);
 enum e_errors	ft_input(int fd, struct s_map *map);
-void			ft_init_game(struct s_map *map);
+enum e_errors	ft_init_mlx(struct s_game *sl);
+void			ft_mlx_free(struct s_game *sl);
+enum e_errors	ft_init_game(struct s_map *map);
+int				ft_exit(struct s_game *sl);
+void			ft_put_img(struct s_game *sl, void *sprite, int pos);
+void			ft_draw(struct s_game *sl);
+void			draw_sprites(struct s_game *sl);
+void ft_mlx_free(struct s_game *sl);
 #endif
