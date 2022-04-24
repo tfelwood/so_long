@@ -73,7 +73,7 @@ char	*get_next_line(int fd)
 		{
 			if (!ft_buf_update(&buf, fd))
 				break ;
-			new_line = ft_strjoin(new_line, &buf);
+			new_line = ft_strjoiner(new_line, &buf);
 			if (!new_line || *(buf.break_ptr - 1) == '\n')
 				is_str = 1;
 		}

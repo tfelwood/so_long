@@ -12,20 +12,23 @@
 
 #include "get_next_line.h"
 
-size_t	ft_strlen(char const *s)
+size_t	ft_strlength(char const *s)
 {
 	size_t	length;
 
 	length = 0;
 	if (s)
 	{
-		while (*s++)
+		while (*s)
+		{
 			++length;
+			++s;
+		}
 	}
 	return (length);
 }
 
-char	*ft_strjoin(char *s1, const t_buffer *buf)
+char	*ft_strjoiner(char *s1, const t_buffer *buf)
 {
 	char	*new_str;
 	char	*tmp;
@@ -34,7 +37,7 @@ char	*ft_strjoin(char *s1, const t_buffer *buf)
 	new_str = NULL;
 	if (buf && buf->data && buf->cur_ptr < buf->break_ptr)
 	{
-		size = ft_strlen(s1) + (buf->break_ptr - buf->cur_ptr) + 1;
+		size = ft_strlength(s1) + (buf->break_ptr - buf->cur_ptr) + 1;
 		new_str = (char *) malloc(size * sizeof(char));
 		if (new_str)
 		{

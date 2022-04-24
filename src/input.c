@@ -3,7 +3,7 @@
 #include "so_long.h"
 #include "get_next_line.h"
 
-static int ft_is_map_symbol(char c)
+static int ft_map_symbol_check(char c)
 {
 	if (c == PLAYER || c == EXIT || c == WALL || c == COLLECTIBLE
 		|| c == SPACE)
@@ -11,7 +11,25 @@ static int ft_is_map_symbol(char c)
 	return (0);
 }
 
-static enum e_errors ft_check_input(struct s_map *map, char *str)
+static void	ft_flags_proc(char c, int pos, struct s_map *map)
+{
+	if (c == PLAYER)
+	{
+		++map->flags.player;
+		map->plr_pos = map->width * map->length + pos;
+	}
+	else if (c == ENEMY)
+	{
+		++map->flags.enemy;
+		//map->enm_pos = pos;
+	}
+	else if (c == EXIT)
+		++map->flags.exit;
+	else if (c == COLLECTIBLE)
+		++map->flags.collectible;
+}
+
+static enum e_errors	ft_check_input(struct s_map *map, char *str)
 {
 	size_t				i;
 	enum e_errors	err;
@@ -27,29 +45,48 @@ static enum e_errors ft_check_input(struct s_map *map, char *str)
 	{
 		if (map->flags.is_wall && str[i] != WALL)
 			map->flags.is_wall = 0;
-		if (str[i] == PLAYER) // TODO similar for COLLECTIBLE & EXIT 
-			++map->flags.player;
-		if (!ft_is_map_symbol(str[i]))
+		if (ft_map_symbol_check(str[i]))
+			ft_flags_proc(str[i], i, map);
+		else
 			err = MAP_BAD_ALPH;
 		++i;
 	}
-	if (i != map->length)
+	if (!err && i != map->length)
 		err = MAP_BAD_FIGURE;
-	else if (str[i - 1] != WALL)
+	else if (!err && str[i - 1] != WALL)
 		err = MAP_BAD_WALLS;
 	return (err);
 }
 
-static void ft_check_flags(struct s_map *map, enum e_errors *error)
+static void	ft_check_flags(struct s_map *map, enum e_errors *error)
 {
-	if (!map->flags.collectible)
-		*error = MAP_BAD_COLLECTIBLE;
-	else if (!map->flags.exit)
-		*error = MAP_BAD_EXIT;
-	else if (map->flags.player != 1)
-		*error =  MAP_BAD_PLAYER;
-	else if (*error != MAP_BAD_FIGURE && !map->flags.is_wall)
-		*error = MAP_BAD_WALLS;
+	if (*error == NO_ERROR)
+	{
+		if (!map->flags.exit)
+			*error = MAP_BAD_EXIT;
+		else if (!map->flags.collectible)
+			*error = MAP_BAD_COLLECTIBLE;
+		else if (map->flags.player != 1)
+			*error = MAP_BAD_PLAYER;
+		else if (!map->flags.is_wall)
+			*error = MAP_BAD_WALLS;
+	}
+}
+
+static enum e_errors	ft_first_input(int fd, struct s_map *map, char **line)
+{
+	enum e_errors	error;
+
+	*line = get_next_line(fd);
+	if (!*line)
+		return (EMPTY_FILE);
+	map->length = ft_strlen(*line);
+	error = ft_check_input(map, *line);
+	if (error == NO_ERROR && !map->flags.is_wall)
+		error = MAP_BAD_WALLS;
+	if (error)
+		free(*line);
+	return (error);
 }
 
 enum e_errors	ft_input(int fd, struct s_map *map)
@@ -58,24 +95,22 @@ enum e_errors	ft_input(int fd, struct s_map *map)
 	enum e_errors	error;
 	char			*tmp;
 
-	error = NO_ERROR;
-	cur_str = get_next_line(fd);
-	map->length = ft_strlen(cur_str);
-	if (cur_str)
-		error = ft_check_input(map, cur_str);
-	if (!error && !map->flags.is_wall)
-		error = MAP_BAD_WALLS;
+	error = ft_first_input(fd, map, &cur_str);
 	while (!error && cur_str)
 	{
 		tmp = map->field;
-		map->field = ft_strjoin(tmp, cur_str);
-		free(tmp);
-		free(cur_str);
-		++map->width;
-		cur_str = get_next_line(fd);
-		error = ft_check_input(map, cur_str);
+		map->field = ft_strjoin(map->field, cur_str);
+		free (tmp);
+		free (cur_str);
+		if (map->field)
+		{
+			++map->width;
+			cur_str = get_next_line(fd);
+			error = ft_check_input(map, cur_str);
+		}
+		else
+			return (BAD_ALLOC);
 	}
-	free(cur_str);
 	ft_check_flags(map, &error);
 	return (error);
 }

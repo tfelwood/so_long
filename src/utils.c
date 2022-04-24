@@ -14,23 +14,39 @@ void	*ft_memset(void *b, int c, size_t len)
 	return (b);
 }
 
+size_t	ft_strlen(char const *s)
+{
+	size_t	length;
+
+	length = 0;
+	if (s)
+	{
+		while (*s && *s != '\n')
+		{
+			++length;
+			++s;
+		}
+	}
+	return (length);
+}
+
 char	*ft_strjoin(char const *s1, char const *s2)
 {
-	size_t	str_size;
+	size_t	str_len;
 	char	*new_str;
 
 	if (s2)
 	{
-		str_size = ft_strlen(s1) + ft_strlen(s2) + 1;
-		new_str = malloc(str_size);
+		str_len = ft_strlen(s1) + ft_strlen(s2);
+		new_str = malloc(str_len + 1);
 		if (new_str)
 		{
-			new_str[str_size - 1] = 0;
-			while (*s1)
+			new_str[str_len] = 0;
+			while (s1 && *s1 && *s1 != '\n')
 				*new_str++ = *s1++;
-			while (*s2)
+			while (*s2 && *s2 != '\n')
 				*new_str++ = *s2++;
-			return (new_str - str_size + 1);
+			return (new_str - str_len);
 		}
 	}
 	return (NULL);

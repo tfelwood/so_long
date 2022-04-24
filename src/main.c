@@ -1,34 +1,44 @@
 #include "so_long.h"
+#include <stdio.h>
 
-
-/*
-int main()
-{
-	void	*window;
-	void	*mlx_instance;
+//int main()
+//{
+//	void	*window;
+//	void	*mlx_instance;
 //	void	*mlx_image;
 //	void	*mlx_image2;
+//	void	*mlx_image3;
+//	void	*mlx_image4;
 //	int width;
 //	int height;
 //	int width2;
 //	int height2;
-
-	mlx_instance = mlx_init();
-	window = mlx_new_window(mlx_instance, 92 * 3, 150, "Walhalla!");
-//	mlx_image = mlx_xpm_file_to_image(mlx_instance, "delfin.xpm", &width, &height);
-//	mlx_image2 = mlx_xpm_file_to_image(mlx_instance, "sand.xpm", &width2, &height2);
+//	int width3;
+//	int height3;
+//
+//	mlx_instance = mlx_init();
+//	window = mlx_new_window(mlx_instance, 1000, 1000, "Walhalla!");
+//	mlx_image = mlx_xpm_file_to_image(mlx_instance, "./test_textures/water/100/0000.xpm", &width, &height);
+//
+//	mlx_image4 = mlx_xpm_file_to_image(mlx_instance, "./test_textures/fish3_100.xpm", &width3, &height3);
+//	mlx_image3 = mlx_xpm_file_to_image(mlx_instance, "./test_textures/corals3100.xpm", &width2, &height2);
 //	mlx_put_image_to_window(mlx_instance, window, mlx_image, 0, 0);
-//	mlx_put_image_to_window(mlx_instance, window, mlx_image2, width, 0);
-	//mlx_put_image_to_window(mlx_instance, window, mlx_image, width * 2, 0);
-//	mlx_put_image_to_window(mlx_instance, window, mlx_image2, 0, height);
-//	mlx_put_image_to_window(mlx_instance, window, mlx_image2, 0, height * 2);
+//	mlx_put_image_to_window(mlx_instance, window, mlx_image3, 0, 0);
+////	mlx_put_image_to_window(mlx_instance, window, mlx_image2, width, 0);
+//	mlx_put_image_to_window(mlx_instance, window, mlx_image, width, height);
+//	mlx_put_image_to_window(mlx_instance, window, mlx_image, width, 0);
+//	mlx_put_image_to_window(mlx_instance, window, mlx_image4, width, height);
+//	mlx_put_image_to_window(mlx_instance, window, mlx_image3, width, 0);
+//	//mlx_put_image_to_window(mlx_instance, window, mlx_image, width * 2, 0);
+////	mlx_put_image_to_window(mlx_instance, window, mlx_image2, 0, height);
+////	mlx_put_image_to_window(mlx_instance, window, mlx_image2, 0, height * 2);
 //	printf("%d\n", width);
-	mlx_loop(mlx_instance);
-	//mlx_destroy_image(mlx_instance, mlx_image);
-	//mlx_destroy_window(mlx_instance, window);
-	return 0;
-}
-*/
+//	printf("%d\n", height);
+//	mlx_loop(mlx_instance);
+//	//mlx_destroy_image(mlx_instance, mlx_image);
+//	//mlx_destroy_window(mlx_instance, window);
+//	return 0;
+//}
 
 enum e_errors	ft_check_file_format(const char *filename)
 {
@@ -37,32 +47,48 @@ enum e_errors	ft_check_file_format(const char *filename)
 	return (NO_ERROR);
 }
 
-void	ft_check_errors(enum e_errors err)
+int	ft_check_errors(enum e_errors err)
 {
-	if (!err)
-		return ;
-	ft_putstr_fd("Error\n", 2);
-	if (err == BAD_ARGS)
-		ft_putstr_fd("Bad arguments\n",2);
-	else if (err == BAD_DESCRIPTOR)
-		ft_putstr_fd("Сould not open the file\n",2);
-	else if (err == BAD_FILE_FORMAT)
-		ft_putstr_fd("Bad file format\n",2);
-	else if (err == MAP_BAD_FIGURE)
-		ft_putstr_fd("Map error: map must be rectangular\n",2);
-	else if (err == MAP_BAD_ALPH)
-		ft_putstr_fd("Map error: bad symbols\n",2);
-	else if (err == MAP_BAD_PLAYER)
-		ft_putstr_fd("Map error: no starting position or "
-					 "more than one tarting position\n",2);
-	else if (err == MAP_BAD_WALLS)
-		ft_putstr_fd("Map error: map must be surrounded by walls\n",2);
-	else if (err == MAP_BAD_EXIT)
-		ft_putstr_fd("Map error: map must contain at least 1 exit",2);
-	else if (err == MAP_BAD_COLLECTIBLE)
-		ft_putstr_fd("Map error: map must contain at least 1 collectible",2);
-	exit(err);
+	static const char *errors[ERR_NUM] =
+			{"Bad arguments\n","Сould not open the file\n",
+			 "Bad file format\n","Map error: map must be rectangular\n",
+			 "Map error: bad symbols\n",
+			 "Map error: map must be surrounded by walls\n",
+			 "Map error: no starting position or "
+			 "more than one starting position\n",
+			 "Map error: map must contain at least 1 exit\n",
+			 "Map error: map must contain at least 1 collectible\n",
+			 "Malloc error\n","File is empty\n","MLX error\n",
+			 "The map size is larger than the screen size\n"};
+	if (err == NO_ERROR)
+		return (0);
+	if (err < ERR_NUM)
+	{
+		ft_putstr_fd("Error\n", 2);
+		ft_putstr_fd(errors[err - 1], 2);
+	}
+	return (1);
 }
+
+void print(struct s_map *map)
+{
+	char	*tmp = map->field;
+	int width = map->width;
+
+	while (width--)
+	{
+		write(1, tmp, map->length);
+		write(1, "\n", 1);
+		tmp += map->length;
+	}
+}
+
+
+static enum e_errors ft_parse_map(struct s_map *map, char *argv)
+{
+
+}
+
 
 int main(int argc, char **argv)
 {
@@ -71,22 +97,23 @@ int main(int argc, char **argv)
 	struct s_map	map;
 
 	error = NO_ERROR;
-	ft_memset(&map, 0, sizeof(map));
 	if (argc != 2)
 		error = BAD_ARGS;
-	if (error == NO_ERROR && ft_check_file_format(argv[1]) == NO_ERROR)
+	else if (ft_check_file_format(argv[1]))
+		error = BAD_FILE_FORMAT;
+	if (!error)
 	{
 		fd = open(argv[1], O_RDONLY);
 		if (fd < 0)
 			error = BAD_DESCRIPTOR;
 		if (!error)
 		{
+			ft_memset(&map, 0, sizeof(map));
 			error = ft_input(fd, &map);
 			close(fd);
 		}
 	}
-	if (error)
+	if (ft_check_errors(error) || ft_check_errors(ft_init_game(&map)))
 		free(map.field);
-	ft_check_errors(error);
-	ft_init_game(&map);
+	//print(&map);
 }
