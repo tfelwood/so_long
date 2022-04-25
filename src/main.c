@@ -62,7 +62,7 @@ int	ft_check_errors(enum e_errors err)
 			 "The map size is larger than the screen size\n"};
 	if (err == NO_ERROR)
 		return (0);
-	if (err < ERR_NUM)
+	if (err > NO_ERROR && err < ERR_NUM)
 	{
 		ft_putstr_fd("Error\n", 2);
 		ft_putstr_fd(errors[err - 1], 2);
@@ -101,19 +101,21 @@ int main(int argc, char **argv)
 		error = BAD_ARGS;
 	else if (ft_check_file_format(argv[1]))
 		error = BAD_FILE_FORMAT;
-	if (!error)
+	if (error == NO_ERROR)
 	{
 		fd = open(argv[1], O_RDONLY);
 		if (fd < 0)
 			error = BAD_DESCRIPTOR;
-		if (!error)
+		if (error == NO_ERROR)
 		{
 			ft_memset(&map, 0, sizeof(map));
 			error = ft_input(fd, &map);
 			close(fd);
 		}
 	}
-	if (ft_check_errors(error) || ft_check_errors(ft_init_game(&map)))
+	if (ft_check_errors(error))
 		free(map.field);
+	else
+		ft_init_game(&map);
 	//print(&map);
 }

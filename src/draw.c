@@ -40,13 +40,13 @@ enum e_errors	ft_moves_input(struct s_game *sl)
 			ft_put_img(sl, sl->mlx_img[ENEMY_IM], i);
 		++i;
 	}
-	if (ft_check_errors(ft_moves_input(sl)) != NO_ERROR)
-		ft_exit(sl);
+	if (ft_moves_input(sl) != NO_ERROR)
+		ft_exit(sl, BAD_ALLOC);
 }
 
 void draw_sprites(struct s_game *sl)
 {
-	static int count = 0;
+	static int	count = 0;
 
 	if (count == INTERVAL)
 		count = 0;
@@ -56,9 +56,7 @@ void draw_sprites(struct s_game *sl)
 		if (sl->cur_sprite == SPR_NUM)
 			sl->cur_sprite = 0;
 		ft_draw(sl);
-	//	count++;
 	}
-//	else
-		count++;
+	count++;
 }
 

@@ -56,10 +56,13 @@ static void ft_mlx_free_img(void *mlx_ptr, void **img_arr, int size)
 
 void ft_mlx_free(struct s_game *sl)
 {
-	mlx_destroy_window(sl->mlx_ptr, sl->mlx_win_ptr);
-	ft_mlx_free_img(sl->mlx_ptr, sl->mlx_img, IMG_NUM);
-	ft_mlx_free_img(sl->mlx_ptr,sl->spr_img, SPR_NUM);
-	free(sl->mlx_ptr);
+	if (sl->mlx_ptr && sl->mlx_win_ptr)
+	{
+		mlx_destroy_window(sl->mlx_ptr, sl->mlx_win_ptr);
+		ft_mlx_free_img(sl->mlx_ptr, sl->mlx_img, IMG_NUM);
+		ft_mlx_free_img(sl->mlx_ptr, sl->spr_img, SPR_NUM);
+		//	free(sl->mlx_ptr);
+	}
 }
 
 enum e_errors ft_init_mlx(struct s_game *sl)
@@ -68,25 +71,19 @@ enum e_errors ft_init_mlx(struct s_game *sl)
 	int					height;
 	enum	e_errors	err;
 
-	/*mlx_get_screen_size(&width, &height);
-	if (IMG_SIZE * sl->map->length > width
-		|| IMG_SIZE * sl->map->width > height)
-		return (SCREEN_ERROR);*/
 	sl->mlx_ptr = mlx_init();
 	if (!sl->mlx_ptr)
 		return (MLX_ERROR);
+	mlx_get_screen_size(&width, &height);
+	if (IMG_SIZE * sl->map->length > width
+		|| IMG_SIZE * sl->map->width > height)
+		return (SCREEN_ERROR);
 	sl->mlx_win_ptr = mlx_new_window(sl->mlx_ptr, sl->map->length * IMG_SIZE,
 									 sl->map->width * IMG_SIZE, GAME_NAME);
 	if (!sl->mlx_win_ptr)
-		err = MLX_ERROR;
+		return (MLX_ERROR);
+	err = ft_image_init(sl->mlx_ptr, sl->spr_img, SPR_PATH,  SPR_NUM);
 	if (err == NO_ERROR)
-		err = ft_image_init(sl->mlx_ptr, sl->spr_img, SPR_PATH,  SPR_NUM);
-	if (err == NO_ERROR)
-		err = ft_image_init(sl->mlx_ptr, sl->mlx_img, IM_PATH,IMG_NUM);
-	if (err != NO_ERROR)
-	{
-		ft_mlx_free(sl);
-		return (err);
-	}
-	return (NO_ERROR);
+		err = ft_image_init(sl->mlx_ptr, sl->mlx_img, IMG_PATH,IMG_NUM);
+	return (err);
 }

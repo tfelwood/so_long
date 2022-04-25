@@ -69,17 +69,62 @@ static int ft_pos_dif(struct s_map *map, int pos1, int pos2)
 			ft_mod(pos1 % map->length - pos2 % map->length));
 }
 
-t_list	*ft_lstnew(const struct s_game *g, int pos, t_list	*parent)
-{
-	t_list	*elem;
 
-	elem = malloc(sizeof(t_list));
+static int ft_compare(t_cell *e1, t_cell *e2)
+{
+	return (!e2 || (e1 && e1->all_way < e2->all_way) || !(e1 || e2));
+}
+
+t_cell	*ft_qu_new(const struct s_map *map, int pos, t_cell	*parent)
+{
+	t_cell	*elem;
+
+	elem = malloc(sizeof(t_cell));
 	if (elem)
 	{
 		elem->pos = pos;
 		elem->parent = parent;
 		elem->beg_way = parent->beg_way + 1;
-		elem->all_way = elem->beg_way + ft_pos_dif(g->map, g->map->plr_pos, pos);
+		elem->all_way = elem->beg_way + ft_pos_dif(map, map->plr_pos, pos);
+		elem->next = NULL;
 	}
 	return (elem);
+}
+
+t_cell	*ft_qu_add(t_cell **q, t_cell *elem,
+					 int (*compr)(t_cell *, t_cell *))
+{
+	t_cell	*prev;
+
+	elem->next = NULL;
+
+	if (!(*q))
+		*q = elem;
+	else if (ft_compare(elem, *q))
+	{
+			elem->next = *q;
+			*q = elem;
+	}
+	else
+	{
+		prev = *q;
+		while (ft_compare(prev->next, elem))
+			prev = prev->next;
+		elem->next = prev->next;
+		prev->next = elem;
+	}
+	return (elem);
+}
+
+
+
+t_cell *ft_find(t_cell *lst, int key)
+{
+	while (lst)
+	{
+		if (lst->pos == key)
+			return (lst);
+		lst = lst->next;
+	}
+	return (NULL);
 }

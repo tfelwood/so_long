@@ -32,11 +32,12 @@
 
 
 
-int	ft_exit(struct s_game *sl)
+int	ft_exit(struct s_game *sl, enum e_errors err)
 {
 	ft_mlx_free(sl);
 	free(sl->map->field);
-	exit (0);
+	ft_check_errors(err);
+	exit(0);
 }
 
 static void	ft_lose(struct s_game *sl)
@@ -44,7 +45,7 @@ static void	ft_lose(struct s_game *sl)
 	ft_putstr_fd("You lose! Movements: ", 1);
 	ft_putnbr_fd(sl->move,1);
 	ft_putstr_fd(" :(\n ", 1);
-	ft_exit(sl);
+	ft_exit(sl, NO_ERROR);
 }
 
 static void	ft_win(struct s_game *sl)
@@ -52,7 +53,7 @@ static void	ft_win(struct s_game *sl)
 	ft_putstr_fd("You win! Movements: ", 1);
 	ft_putnbr_fd(sl->move,1);
 	ft_putstr_fd(" :)\n ", 1);
-	ft_exit(sl);
+	ft_exit(sl, NO_ERROR);
 }
 
 static void ft_move(struct s_game *sl, int new_pos)
@@ -84,7 +85,7 @@ static void ft_move(struct s_game *sl, int new_pos)
 static int	ft_key_proc(int key, struct s_game *sl)
 {
 	if (key == ESC)
-		ft_exit(sl);
+		ft_exit(sl, NO_ERROR);
 	else if (key == KEY_W || key == UP_ARROW)
 		ft_move(sl, sl->map->plr_pos - sl->map->length);
 	else if (key == KEY_S || key == DOWN_ARROW)
@@ -96,21 +97,19 @@ static int	ft_key_proc(int key, struct s_game *sl)
 }
 
 
-enum e_errors ft_init_game(struct s_map *map)
+void	ft_init_game(struct s_map *map)
 {
 	struct s_game	sl;
 	enum e_errors	error;
 
+	ft_memset(&sl, 0, sizeof(sl));
 	sl.map = map;
-	sl.move = 0;
-	sl.cur_sprite = 0;
 	error = ft_init_mlx(&sl);
 	if (error != NO_ERROR)
-		return (error);
+		ft_exit (&sl, error);
 	ft_draw(&sl);
 	mlx_loop_hook(sl.mlx_ptr, draw_sprites, &sl);
 	mlx_hook(sl.mlx_win_ptr, 17, 0, ft_exit, &sl);
 	mlx_hook(sl.mlx_win_ptr, 2, 0, ft_key_proc, &sl);
 	mlx_loop(sl.mlx_ptr);
-	return (NO_ERROR);
 }
