@@ -21,7 +21,7 @@
 # define GAME_NAME "so long"
 # define IMG_SIZE  100
 # define SPR_PATH "./test_textures/water/100/"
-# define IM_PATH "./test_textures/"
+# define IMG_PATH "./test_textures/"
 # define EXT ".xpm"
 # define INTERVAL 300
 
@@ -85,11 +85,11 @@ typedef struct s_cell
 
 struct	s_map
 {
-	int			width;
-	int			length;
+	int				width;
+	int				length;
 	struct s_flags	flags;
 	char			*field;
-	t_cell			*cond;
+//	t_cell			*cond;
 	int 			plr_pos;
 	int 			enm_pos;
 };
@@ -103,7 +103,6 @@ struct s_game
 	int 			cur_sprite;
 	void			*mlx_img[IMG_NUM];
 	void			*spr_img[SPR_NUM];
-
 };
 
 void			ft_putstr_fd(const char *s, int fd);
@@ -117,10 +116,10 @@ int				ft_check_errors(enum e_errors err);
 enum e_errors	ft_input(int fd, struct s_map *map);
 enum e_errors	ft_init_mlx(struct s_game *sl);
 void			ft_mlx_free(struct s_game *sl);
-enum e_errors	ft_init_game(struct s_map *map);
-int				ft_exit(struct s_game *sl);
+void			ft_init_game(struct s_map *map);
+int				ft_exit(struct s_game *sl, enum e_errors err);
 void			ft_put_img(struct s_game *sl, void *sprite, int pos);
 void			ft_draw(struct s_game *sl);
 void			draw_sprites(struct s_game *sl);
-void ft_mlx_free(struct s_game *sl);
+void			ft_mlx_free(struct s_game *sl);
 #endif
