@@ -14,7 +14,11 @@ add_executable(so_long
         src/get_next_line.c
         src/get_next_line_utils.c
         src/input.c
-        src/game.c)
+        src/game.c
+        src/draw.c
+        src/utils2.c
+        src/mlx_init.c
+        )
 
 SET(CMAKE_C_FLAGS  " ${CMAKE_C_FLAGS} -Wall -Wextra")
 

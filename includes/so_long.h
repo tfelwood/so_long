@@ -74,24 +74,15 @@ struct	s_flags
 	char	is_wall;
 };
 
-typedef struct s_cell
-{
-	int				pos;
-	struct s_cell	*parent;
-	int				beg_way;
-	int 			all_way;
-	struct s_cell	*next;
-} t_cell;
-
 struct	s_map
 {
 	int				width;
 	int				length;
 	struct s_flags	flags;
 	char			*field;
-//	t_cell			*cond;
 	int 			plr_pos;
 	int 			enm_pos;
+	int 			cur_pl_pos;
 };
 
 struct s_game
@@ -121,5 +112,4 @@ int				ft_exit(struct s_game *sl, enum e_errors err);
 void			ft_put_img(struct s_game *sl, void *sprite, int pos);
 void			ft_draw(struct s_game *sl);
 void			draw_sprites(struct s_game *sl);
-void			ft_mlx_free(struct s_game *sl);
 #endif
