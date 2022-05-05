@@ -2,7 +2,7 @@
 
 #include "so_long.h"
 
-static char	*ft_path_gen (const char *dir, int i, const char *ext)
+static char	*ft_path_gen(const char *dir, int i, const char *ext)
 {
 	char	*str1;
 	char	*str2;
@@ -61,7 +61,7 @@ void ft_mlx_free(struct s_game *sl)
 		mlx_destroy_window(sl->mlx_ptr, sl->mlx_win_ptr);
 		ft_mlx_free_img(sl->mlx_ptr, sl->mlx_img, IMG_NUM);
 		ft_mlx_free_img(sl->mlx_ptr, sl->spr_img, SPR_NUM);
-		//	free(sl->mlx_ptr);
+		free(sl->mlx_ptr);
 	}
 }
 

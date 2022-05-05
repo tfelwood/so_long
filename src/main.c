@@ -83,12 +83,15 @@ void print(struct s_map *map)
 	}
 }
 
-
 static enum e_errors ft_parse_map(struct s_map *map, char *argv)
 {
 
 }
 
+static enum e_errors	ft_open(char *path)//todo check dir
+{
+
+}
 
 int main(int argc, char **argv)
 {

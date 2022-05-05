@@ -13,11 +13,9 @@ void	ft_lstadd_front(t_cell **lst, t_cell *new)
 	}
 }
 
-t_cell	*ft_qu_new(const struct s_map *map, int pos, t_cell	*parent)
+t_cell	*ft_cell_init(t_cell *elem, t_cell *parent,
+						const struct s_map *map, int pos)
 {
-	t_cell	*elem;
-
-	elem = malloc(sizeof(t_cell));
 	if (elem)
 	{
 		elem->pos = pos;
@@ -32,8 +30,16 @@ t_cell	*ft_qu_new(const struct s_map *map, int pos, t_cell	*parent)
 	return (elem);
 }
 
+t_cell	*ft_qu_new(const struct s_map *map, int pos, t_cell	*parent)
+{
+	t_cell	*elem;
+
+	elem = malloc(sizeof(t_cell));
+	return (ft_cell_init(elem, parent, map, pos));
+}
+
 t_cell	*ft_qu_add(t_cell **q, t_cell *elem,
-					 int (*compr)(t_cell *, t_cell *))
+					 int (*comp)(t_cell *, t_cell *))
 {
 	t_cell	*prev;
 
@@ -42,7 +48,7 @@ t_cell	*ft_qu_add(t_cell **q, t_cell *elem,
 	elem->next = NULL;
 	if (!(*q))
 		*q = elem;
-	else if (compr(elem, *q))
+	else if (comp(elem, *q))
 	{
 			elem->next = *q;
 			*q = elem;
@@ -64,11 +70,13 @@ t_cell	*ft_qu_del(t_cell **q, int key)
 	t_cell	*elem;
 
 	tmp = *q;
-	elem = NULL;
 	if (!tmp || key < 0)
 		return (NULL);
 	if (tmp->pos == key)
+	{
 		*q = (*q)->next;
+		elem = tmp;
+	}
 	else
 	{
 		while (tmp->next && tmp->next->pos != key)
@@ -89,7 +97,7 @@ t_cell	*ft_qu_find(t_cell *lst, int key)
 {
 	while (lst)
 	{
-		if (lst->pos == key)
+		if (*lst->pos == key)
 			return (lst);
 		lst = lst->next;
 	}

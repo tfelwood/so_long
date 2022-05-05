@@ -14,9 +14,9 @@ void	*ft_memset(void *b, int c, size_t len)
 	return (b);
 }
 
-size_t	ft_strlen(char const *s)
+int	ft_strlen(char const *s)
 {
-	size_t	length;
+	int	length;
 
 	length = 0;
 	if (s)

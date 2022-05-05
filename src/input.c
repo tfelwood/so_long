@@ -18,20 +18,17 @@ static void	ft_flags_proc(char c, int pos, struct s_map *map)
 		++map->flags.player;
 		map->plr_pos = map->width * map->length + pos;
 	}
-	else if (c == ENEMY)
-	{
-		++map->flags.enemy;
-		//map->enm_pos = pos;
-	}
 	else if (c == EXIT)
 		++map->flags.exit;
 	else if (c == COLLECTIBLE)
 		++map->flags.collectible;
+	else if (c == SPACE)
+		++map->flags.empty;
 }
 
 static enum e_errors	ft_check_input(struct s_map *map, char *str)
 {
-	size_t				i;
+	int				i;
 	enum e_errors	err;
 
 	err = NO_ERROR;

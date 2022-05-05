@@ -7,8 +7,7 @@ void	ft_put_img(struct s_game *sl, void *sprite, int pos)
 							(pos / sl->map->length) * IMG_SIZE);
 }
 
-
-enum e_errors	ft_moves_input(struct s_game *sl)
+enum e_errors	ft_moves_input(struct s_game *sl)//todo вывод moves в консоль в небонусной части
 {
 	char	*str_move;
 

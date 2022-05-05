@@ -72,6 +72,7 @@ struct	s_flags
 	int		collectible;
 	int		exit;
 	char	is_wall;
+	int 	empty;
 };
 
 struct	s_map
@@ -97,16 +98,18 @@ struct s_game
 };
 
 void			ft_putstr_fd(const char *s, int fd);
-size_t			ft_strlen(const char *str);
+int				ft_strlen(const char *str);
 void			*ft_memset(void *b, int c, size_t len);
 char			*ft_strjoin(char const *s1, char const *s2);
 char			*ft_itoa(int n);
 void			ft_putnbr_fd(int n, int fd);
 int				ft_strcmp(const char *s1, const char *s2);
+int				ft_pos_dif(const struct s_map *map, int pos1, int pos2);
 int				ft_check_errors(enum e_errors err);
 enum e_errors	ft_input(int fd, struct s_map *map);
 enum e_errors	ft_init_mlx(struct s_game *sl);
 void			ft_mlx_free(struct s_game *sl);
+int				ft_choose_place (struct s_game *sl);
 void			ft_init_game(struct s_map *map);
 int				ft_exit(struct s_game *sl, enum e_errors err);
 void			ft_put_img(struct s_game *sl, void *sprite, int pos);

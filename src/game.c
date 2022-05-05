@@ -96,7 +96,6 @@ static int	ft_key_proc(int key, struct s_game *sl)
 		ft_move(sl, sl->map->plr_pos + 1);
 }
 
-
 void	ft_init_game(struct s_map *map)
 {
 	struct s_game	sl;
@@ -105,6 +104,8 @@ void	ft_init_game(struct s_map *map)
 	ft_memset(&sl, 0, sizeof(sl));
 	sl.map = map;
 	error = ft_init_mlx(&sl);
+	srand(time(0));
+	sl.map->enm_pos = ft_choose_place(sl, ft_cond_with_path);
 	if (error != NO_ERROR)
 		ft_exit (&sl, error);
 	ft_draw(&sl);
