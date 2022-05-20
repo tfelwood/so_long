@@ -58,6 +58,7 @@ int	ft_check_errors(enum e_errors err)
 			 "more than one starting position\n",
 			 "Map error: map must contain at least 1 exit\n",
 			 "Map error: map must contain at least 1 collectible\n",
+			 "No place for enemy\n",
 			 "Malloc error\n","File is empty\n","MLX error\n",
 			 "The map size is larger than the screen size\n"};
 	if (err == NO_ERROR)

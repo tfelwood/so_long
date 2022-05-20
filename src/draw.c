@@ -43,13 +43,13 @@ enum e_errors	ft_moves_input(struct s_game *sl)//todo вывод moves в кон
 		ft_exit(sl, BAD_ALLOC);
 }
 
-void draw_sprites(struct s_game *sl)
+void ft_draw_sprites(struct s_game *sl)
 {
 	static int	count = 0;
 
 	if (count == INTERVAL)
 		count = 0;
-	if (count % INTERVAL == 0)
+	if (!count)
 	{
 		++sl->cur_sprite;
 		if (sl->cur_sprite == SPR_NUM)

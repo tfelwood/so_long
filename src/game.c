@@ -79,6 +79,9 @@ static void ft_move(struct s_game *sl, int new_pos)
 	sl->map->field[sl->map->plr_pos] = SPACE;
 	sl->map->field[new_pos] = PLAYER;
 	sl->map->plr_pos = new_pos;
+	ft_putstr_fd("Moves: ", 1);
+	ft_putnbr_fd(sl->move, 1);
+	ft_putstr_fd("\n",1);
 }
 
 
@@ -105,11 +108,13 @@ void	ft_init_game(struct s_map *map)
 	sl.map = map;
 	error = ft_init_mlx(&sl);
 	srand(time(0));
-	sl.map->enm_pos = ft_choose_place(sl, ft_cond_with_path);
+	if (!error)
+		error = ft_enemy_place(&sl);
 	if (error != NO_ERROR)
 		ft_exit (&sl, error);
 	ft_draw(&sl);
-	mlx_loop_hook(sl.mlx_ptr, draw_sprites, &sl);
+	mlx_loop_hook(sl.mlx_ptr, ft_draw_sprites, &sl);
+	mlx_loop_hook(sl.mlx_ptr, ft_enemy_move, &sl);
 	mlx_hook(sl.mlx_win_ptr, 17, 0, ft_exit, &sl);
 	mlx_hook(sl.mlx_win_ptr, 2, 0, ft_key_proc, &sl);
 	mlx_loop(sl.mlx_ptr);

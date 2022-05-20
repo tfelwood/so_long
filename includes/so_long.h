@@ -8,6 +8,7 @@
 # include <stdlib.h>
 # include <fcntl.h>
 # include "mlx.h"
+# include "queue.h"
 
 # define WALL '1'
 # define PLAYER 'P'
@@ -15,7 +16,7 @@
 # define COLLECTIBLE 'C'
 # define SPACE '0'
 # define ENEMY  'X'
-# define ERR_NUM 14
+# define ERR_NUM 15
 # define IMG_NUM 5
 # define SPR_NUM 40
 # define GAME_NAME "so long"
@@ -24,6 +25,7 @@
 # define IMG_PATH "./test_textures/"
 # define EXT ".xpm"
 # define INTERVAL 300
+# define ENEMY_INTERVAL 50
 
 enum	e_errors
 {
@@ -37,6 +39,7 @@ enum	e_errors
 	MAP_BAD_PLAYER,
 	MAP_BAD_EXIT,
 	MAP_BAD_COLLECTIBLE,
+	ENEMY_ERROR,
 	BAD_ALLOC,
 	EMPTY_FILE,
 	MLX_ERROR,
@@ -95,6 +98,7 @@ struct s_game
 	int 			cur_sprite;
 	void			*mlx_img[IMG_NUM];
 	void			*spr_img[SPR_NUM];
+	t_cell			*enm_path;
 };
 
 void			ft_putstr_fd(const char *s, int fd);
@@ -109,10 +113,12 @@ int				ft_check_errors(enum e_errors err);
 enum e_errors	ft_input(int fd, struct s_map *map);
 enum e_errors	ft_init_mlx(struct s_game *sl);
 void			ft_mlx_free(struct s_game *sl);
-int				ft_choose_place (struct s_game *sl);
+int				ft_enemy_place (struct s_game *sl);
 void			ft_init_game(struct s_map *map);
 int				ft_exit(struct s_game *sl, enum e_errors err);
 void			ft_put_img(struct s_game *sl, void *sprite, int pos);
 void			ft_draw(struct s_game *sl);
-void			draw_sprites(struct s_game *sl);
+void			ft_draw_sprites(struct s_game *sl);
+int				ft_is_obstacle(char c);
+int				ft_enemy_move(struct s_game *sl);
 #endif

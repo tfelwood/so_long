@@ -6,11 +6,11 @@
 /*   By: tfelwood <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/03 17:57:13 by tfelwood          #+#    #+#             */
-/*   Updated: 2022/05/03 17:59:51 by tfelwood         ###   ########.fr       */
+/*   Updated: 2022/05/16 14:25:30 by tfelwood         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "queue.h"
+#include "so_long.h"
 
 static int ft_compare(t_cell *e1, t_cell *e2)
 {
@@ -30,7 +30,7 @@ int ft_pos_dif(const struct s_map *map, int pos1, int pos2)
 			ft_mod(pos1 % map->length - pos2 % map->length));
 }
 
-static int	ft_is_obstacle(char c)
+int	ft_is_obstacle(char c)
 {
 	return (c == WALL || c == ENEMY || c == COLLECTIBLE || c == EXIT);
 }
@@ -133,4 +133,28 @@ t_cell	*ft_path_count(struct s_game *sl)
 	ft_qu_free(&open);
 	ft_qu_free(&closed);
 	return(path);
+}
+
+int ft_enemy_move(struct s_game *sl)
+{
+	static int	count;
+	t_cell		*elem;
+
+	if (count == ENEMY_INTERVAL)
+		count = 0;
+	if (!count)
+	{
+		if (sl->map->cur_pl_pos != sl->map->plr_pos)
+			ft_qu_free(&sl->enm_path);
+		if (!sl->enm_path)
+			sl->enm_path = ft_path_count(sl);
+		sl->map->field[sl->map->enm_pos] = '0';
+		sl->map->field[sl->enm_path->pos] = 'X';
+		sl->map->enm_pos = sl->enm_path.pos;
+		elem = sl->enm_path;
+		sl->enm_path = sl->enm_path->next;
+		free(elem);
+	}
+	++count;
+
 }

@@ -4,7 +4,7 @@
 
 #ifndef QUEUE_H
 #define QUEUE_H
-#include "so_long.h"
+
 typedef struct s_cell
 {
 	int				pos;
@@ -23,4 +23,5 @@ t_cell	*ft_qu_find(t_cell *lst, int key);
 void	ft_qu_free(t_cell **lst);
 t_cell	*ft_cell_init(t_cell *el, t_cell *parent,
 						const struct s_map *map, int pos);
+t_cell			*ft_path_count(struct s_game *sl);
 #endif
