@@ -1,8 +1,5 @@
-//
-// Created by Themis Felwood on 4/18/22.
-//
 
-#include "queue.h"
+#include "so_long.h"
 
 void	ft_lstadd_front(t_cell **lst, t_cell *new)
 {
@@ -34,7 +31,7 @@ t_cell	*ft_qu_new(const struct s_map *map, int pos, t_cell	*parent)
 {
 	t_cell	*elem;
 
-	elem = malloc(sizeof(t_cell));
+	elem = (t_cell*) malloc(sizeof(t_cell));
 	return (ft_cell_init(elem, parent, map, pos));
 }
 
@@ -56,7 +53,7 @@ t_cell	*ft_qu_add(t_cell **q, t_cell *elem,
 	else
 	{
 		prev = *q;
-		while (compr(prev->next, elem))
+		while (comp(prev->next, elem))
 			prev = prev->next;
 		elem->next = prev->next;
 		prev->next = elem;
@@ -97,7 +94,7 @@ t_cell	*ft_qu_find(t_cell *lst, int key)
 {
 	while (lst)
 	{
-		if (*lst->pos == key)
+		if (lst->pos == key)
 			return (lst);
 		lst = lst->next;
 	}

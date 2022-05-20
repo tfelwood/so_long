@@ -20,7 +20,7 @@ static char	*ft_path_gen(const char *dir, int i, const char *ext)
 }
 
 static enum e_errors ft_image_init
-		(void *mlx_ptr, void ** imgs, const char *dir,  int size)
+		(void *mlx_ptr, void **imgs, const char *dir,  int size)
 {
 	int		i;
 	char	*path;

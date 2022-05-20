@@ -36,7 +36,7 @@ int	ft_is_obstacle(char c)
 }
 
 
-/*t_cell *ft_qu_check(t_cell **lst, int key, int new_way)
+t_cell *ft_qu_check(t_cell **lst, int key, int new_way)
 {
 	t_cell	*tmp;
 
@@ -46,7 +46,26 @@ int	ft_is_obstacle(char c)
 		return (ft_qu_del(lst, key));
 	}
 	return (NULL);
-}*/
+}
+
+/*OPEN = priority queue containing START
+CLOSED = empty set
+while lowest rank in OPEN is not the GOAL:
+  current = remove lowest rank item from OPEN
+  add current to CLOSED
+  for neighbors of current:
+    cost = g(current) + movementcost(current, neighbor)
+    if neighbor in OPEN and cost less than g(neighbor):
+      remove neighbor from OPEN, because new path is better
+    if neighbor in CLOSED and cost less than g(neighbor): ⁽²⁾
+      remove neighbor from CLOSED
+    if neighbor not in OPEN and neighbor not in CLOSED:
+      set g(neighbor) to cost
+      add neighbor to OPEN
+      set priority queue rank to g(neighbor) + h(neighbor)
+      set neighbor's parent to current
+reconstruct reverse path from goal to start
+by following parent pointers*/
 
 
 enum e_errors	ft_check_neighbours(struct s_game *sl, t_cell *elem,
@@ -62,15 +81,17 @@ enum e_errors	ft_check_neighbours(struct s_game *sl, t_cell *elem,
 	{
 		if (!ft_is_obstacle(sl->map->field[pos[i]]))
 		{
-			tmp = ft_qu_del(open, pos[i]);
+			tmp = ft_qu_check(open, pos[i], elem->beg_way + 1);
 			if (!tmp)
-				tmp = ft_qu_del(closed, pos[i]);
-			if (tmp && tmp->beg_way > elem->beg_way + 1)
+				tmp = ft_qu_check(closed, pos[i], elem->beg_way + 1);
+			if (tmp)
 				ft_cell_init(tmp, elem, sl->map, pos[i]);
-			else
+			else if (!ft_qu_find(*open, pos[i]) && !ft_qu_find(*closed, pos[i]))
+			{
 				tmp = ft_qu_new(sl->map, pos[i], elem);
-			if (!tmp)
-				return (BAD_ALLOC);
+				if (!tmp)
+					return (BAD_ALLOC);
+			}
 			ft_qu_add(open, tmp, ft_compare);
 		}
 		++i;
@@ -128,11 +149,11 @@ t_cell	*ft_path_count(struct s_game *sl)
 		ft_qu_free(&closed);
 		ft_exit(sl, BAD_ALLOC);
 	}
-	if (ft_qu_find(closed, sl->map->enm_pos))
+	if (ft_qu_find(closed, sl->map->cur_pl_pos))
 		path = ft_form_path(ft_qu_find(closed, sl->map->cur_pl_pos), &closed);
 	ft_qu_free(&open);
 	ft_qu_free(&closed);
-	return(path);
+	return (path);
 }
 
 int ft_enemy_move(struct s_game *sl)
@@ -150,11 +171,11 @@ int ft_enemy_move(struct s_game *sl)
 			sl->enm_path = ft_path_count(sl);
 		sl->map->field[sl->map->enm_pos] = '0';
 		sl->map->field[sl->enm_path->pos] = 'X';
-		sl->map->enm_pos = sl->enm_path.pos;
+		sl->map->enm_pos = sl->enm_path->pos;
 		elem = sl->enm_path;
 		sl->enm_path = sl->enm_path->next;
 		free(elem);
 	}
 	++count;
-
+	return (0);
 }

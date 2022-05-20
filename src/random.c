@@ -14,6 +14,7 @@
 
 int ft_cond_with_path(int pos, struct  s_game *sl)
 {
+	sl->map->enm_pos = pos;
 	return (!ft_is_obstacle(sl->map->field[pos])
 		&& ft_pos_dif(sl->map, pos, sl->map->plr_pos) > 2
 		&& ft_path_count(sl));
@@ -23,11 +24,11 @@ int	ft_place_rand(struct s_game *sl,
 					int (*cond)(int pos, struct s_game *sl))
 {
 	int 	count;
-	char	*field;
+	int		*field;
 	int 	pos;
 
 	count = (sl->map->length - 2) * sl->map->width;
-	field = (int *)malloc(count * sizeof(char));
+	field = (int *)malloc(count * sizeof(int));
 	if (!field)
 		ft_exit(sl, BAD_ALLOC);
 	while (count--)
@@ -36,10 +37,12 @@ int	ft_place_rand(struct s_game *sl,
 	while (count)
 	{
 		pos = rand() % count;
-		if (cond(field[pos + sl->map->length], sl))
+		if (cond(field[pos], sl))
 			break;
+		field[pos] = field[count - 1];
 		count--;
 	}
+	pos = field[pos];
 	if (!count)
 		pos = -1;
 	free(field);
@@ -52,10 +55,11 @@ int	ft_enemy_place(struct s_game *sl)
 
 	pos = ft_place_rand(sl, ft_cond_with_path);
 	if (pos != -1)
+	{
 		sl->map->field[pos] = 'X';
+		sl->map->enm_pos = pos;
+		return (NO_ERROR);
+	}
 	else
 		return (ENEMY_ERROR);
 }
-
-
-int ft_choose_move ();

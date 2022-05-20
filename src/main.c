@@ -89,9 +89,33 @@ static enum e_errors ft_parse_map(struct s_map *map, char *argv)
 
 }
 
-static enum e_errors	ft_open(char *path)//todo check dir
+static enum e_errors ft_read(char *path, struct s_map *map)//todo check dir
 {
+	int 			fd;
+	char			*tmp;
+	enum e_errors	err;
 
+	err = NO_ERROR;
+	tmp = ft_strjoin(path, "/");
+	if (!tmp)
+		return (BAD_ALLOC);
+	fd = open(tmp, O_RDONLY);
+	free (tmp);
+	if (fd != -1)
+	{
+		close(fd);
+		return (BAD_DESCRIPTOR);
+	}
+	fd = open(path, O_RDONLY);
+	if (fd > 0)
+	{
+		ft_memset(map, 0, sizeof(*map));
+		err = ft_input(fd, map);
+		close(fd);
+	}
+	else
+		err = BAD_DESCRIPTOR;
+	return (err);
 }
 
 int main(int argc, char **argv)
@@ -106,17 +130,7 @@ int main(int argc, char **argv)
 	else if (ft_check_file_format(argv[1]))
 		error = BAD_FILE_FORMAT;
 	if (error == NO_ERROR)
-	{
-		fd = open(argv[1], O_RDONLY);
-		if (fd < 0)
-			error = BAD_DESCRIPTOR;
-		if (error == NO_ERROR)
-		{
-			ft_memset(&map, 0, sizeof(map));
-			error = ft_input(fd, &map);
-			close(fd);
-		}
-	}
+		error = ft_read(argv[1], &map);
 	if (ft_check_errors(error))
 		free(map.field);
 	else

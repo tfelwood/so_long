@@ -9,6 +9,7 @@
 # include <fcntl.h>
 # include "mlx.h"
 # include "queue.h"
+# include <time.h>
 
 # define WALL '1'
 # define PLAYER 'P'
@@ -75,7 +76,7 @@ struct	s_flags
 	int		collectible;
 	int		exit;
 	char	is_wall;
-	int 	empty;
+//	int 	empty;
 };
 
 struct	s_map

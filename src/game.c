@@ -36,6 +36,7 @@ int	ft_exit(struct s_game *sl, enum e_errors err)
 {
 	ft_mlx_free(sl);
 	free(sl->map->field);
+	ft_qu_free(sl->enm_path);
 	ft_check_errors(err);
 	exit(0);
 }
@@ -64,7 +65,6 @@ static void ft_move(struct s_game *sl, int new_pos)
 	++sl->move;
 	if (sl->map->field[new_pos] == EXIT && !sl->map->flags.collectible)
 	{
-		ft_put_img(sl, sl->mlx_img[PLAYER_IM], new_pos);
 		sl->map->field[sl->map->plr_pos] = SPACE;
 		ft_win(sl);
 	}
@@ -108,7 +108,7 @@ void	ft_init_game(struct s_map *map)
 	sl.map = map;
 	error = ft_init_mlx(&sl);
 	srand(time(0));
-	if (!error)
+	if (error == NO_ERROR)
 		error = ft_enemy_place(&sl);
 	if (error != NO_ERROR)
 		ft_exit (&sl, error);

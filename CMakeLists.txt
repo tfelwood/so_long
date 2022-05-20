@@ -18,7 +18,9 @@ add_executable(so_long
         src/draw.c
         src/utils2.c
         src/mlx_init.c
-        src/random.c)
+        src/random.c
+        src/queue.c
+        src/enemy.c)
 
 SET(CMAKE_C_FLAGS  " ${CMAKE_C_FLAGS} -Wall -Wextra")
 
