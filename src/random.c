@@ -14,10 +14,19 @@
 
 int ft_cond_with_path(int pos, struct  s_game *sl)
 {
+	t_cell *cell;
+
 	sl->map->enm_pos = pos;
-	return (!ft_is_obstacle(sl->map->field[pos])
-		&& ft_pos_dif(sl->map, pos, sl->map->plr_pos) > 2
-		&& ft_path_count(sl));
+	cell = ft_path_count(sl);
+	if (!ft_is_obstacle(sl->map->field[pos])
+		&& ft_pos_dif(sl->map, pos, sl->map->plr_pos) > 4
+		&& cell)
+	{
+		ft_qu_free(&cell);
+		return (1);
+	}
+	ft_qu_free(&cell);
+	return (0);
 }
 
 int	ft_place_rand(struct s_game *sl,

@@ -14,7 +14,7 @@ enum e_errors	ft_moves_input(struct s_game *sl)//todo вывод moves в кон
 	str_move = ft_itoa(sl->move);
 	if (!str_move)
 		return (BAD_ALLOC);
-	mlx_string_put(sl->mlx_ptr, sl->mlx_win_ptr, 10, 10, 5, str_move);
+	mlx_string_put(sl->mlx_ptr, sl->mlx_win_ptr, 10, 20, 5, str_move);
 	free (str_move);
 	return (NO_ERROR);
 }
@@ -43,7 +43,7 @@ enum e_errors	ft_moves_input(struct s_game *sl)//todo вывод moves в кон
 		ft_exit(sl, BAD_ALLOC);
 }
 
-void ft_draw_sprites(struct s_game *sl)
+int	ft_draw_sprites(struct s_game *sl)
 {
 	static int	count = 0;
 
@@ -54,8 +54,10 @@ void ft_draw_sprites(struct s_game *sl)
 		++sl->cur_sprite;
 		if (sl->cur_sprite == SPR_NUM)
 			sl->cur_sprite = 0;
+		ft_enemy_move(sl);
 		ft_draw(sl);
 	}
 	count++;
+	return (0);
 }
 

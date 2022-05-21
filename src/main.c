@@ -71,7 +71,7 @@ int	ft_check_errors(enum e_errors err)
 	return (1);
 }
 
-void print(struct s_map *map)
+/*void print(struct s_map *map)
 {
 	char	*tmp = map->field;
 	int width = map->width;
@@ -82,12 +82,7 @@ void print(struct s_map *map)
 		write(1, "\n", 1);
 		tmp += map->length;
 	}
-}
-
-static enum e_errors ft_parse_map(struct s_map *map, char *argv)
-{
-
-}
+}*/
 
 static enum e_errors ft_read(char *path, struct s_map *map)//todo check dir
 {
@@ -121,7 +116,6 @@ static enum e_errors ft_read(char *path, struct s_map *map)//todo check dir
 int main(int argc, char **argv)
 {
 	enum e_errors	error;
-	int				fd;
 	struct s_map	map;
 
 	error = NO_ERROR;

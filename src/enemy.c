@@ -68,6 +68,18 @@ reconstruct reverse path from goal to start
 by following parent pointers*/
 
 
+t_cell	*ft_check_lists
+			(t_cell **open, t_cell **closed, int pos, int way)
+{
+	t_cell	*tmp;
+
+	tmp = ft_qu_check(open, pos, way);
+	if (!tmp)
+		tmp = ft_qu_check(closed, pos, way);
+	return (tmp);
+}
+
+
 enum e_errors	ft_check_neighbours(struct s_game *sl, t_cell *elem,
 		t_cell **open, t_cell **closed)
 {
@@ -81,12 +93,11 @@ enum e_errors	ft_check_neighbours(struct s_game *sl, t_cell *elem,
 	{
 		if (!ft_is_obstacle(sl->map->field[pos[i]]))
 		{
-			tmp = ft_qu_check(open, pos[i], elem->beg_way + 1);
-			if (!tmp)
-				tmp = ft_qu_check(closed, pos[i], elem->beg_way + 1);
+			tmp = ft_check_lists(open, closed, pos[i], elem->beg_way + 1);
 			if (tmp)
 				ft_cell_init(tmp, elem, sl->map, pos[i]);
-			else if (!ft_qu_find(*open, pos[i]) && !ft_qu_find(*closed, pos[i]))
+			else if (!ft_qu_find(*open, pos[i])
+					&& !ft_qu_find(*closed, pos[i]))
 			{
 				tmp = ft_qu_new(sl->map, pos[i], elem);
 				if (!tmp)
@@ -169,11 +180,14 @@ int ft_enemy_move(struct s_game *sl)
 			ft_qu_free(&sl->enm_path);
 		if (!sl->enm_path)
 			sl->enm_path = ft_path_count(sl);
+		if (sl->enm_path->pos == sl->map->plr_pos)
+			ft_lose(sl);
 		sl->map->field[sl->map->enm_pos] = '0';
 		sl->map->field[sl->enm_path->pos] = 'X';
 		sl->map->enm_pos = sl->enm_path->pos;
 		elem = sl->enm_path;
 		sl->enm_path = sl->enm_path->next;
+		printf("free %d\n", elem->pos);
 		free(elem);
 	}
 	++count;

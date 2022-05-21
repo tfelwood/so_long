@@ -22,8 +22,6 @@ static void	ft_flags_proc(char c, int pos, struct s_map *map)
 		++map->flags.exit;
 	else if (c == COLLECTIBLE)
 		++map->flags.collectible;
-/*	else if (c == SPACE)
-		++map->flags.empty;*/
 }
 
 static enum e_errors	ft_check_input(struct s_map *map, char *str)
@@ -108,6 +106,7 @@ enum e_errors	ft_input(int fd, struct s_map *map)
 		else
 			return (BAD_ALLOC);
 	}
+	free(cur_str);
 	ft_check_flags(map, &error);
 	return (error);
 }

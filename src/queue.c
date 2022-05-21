@@ -32,6 +32,7 @@ t_cell	*ft_qu_new(const struct s_map *map, int pos, t_cell	*parent)
 	t_cell	*elem;
 
 	elem = (t_cell*) malloc(sizeof(t_cell));
+	printf("malloc %d\n", pos);
 	return (ft_cell_init(elem, parent, map, pos));
 }
 
@@ -109,6 +110,7 @@ void	ft_qu_free(t_cell **lst)
 	{
 		tmp = *lst;
 		*lst = (*lst)->next;
+		printf("free %d\n", tmp->pos);
 		free(tmp);
 	}
 	*lst = NULL;

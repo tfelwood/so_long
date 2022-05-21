@@ -6,6 +6,7 @@
 # define SO_LONG_H
 # include <unistd.h>
 # include <stdlib.h>
+# include <stdio.h>
 # include <fcntl.h>
 # include "mlx.h"
 # include "queue.h"
@@ -25,8 +26,9 @@
 # define SPR_PATH "./test_textures/water/100/"
 # define IMG_PATH "./test_textures/"
 # define EXT ".xpm"
-# define INTERVAL 300
-# define ENEMY_INTERVAL 50
+# define INTERVAL 10
+# define ENEMY_INTERVAL 60
+
 
 enum	e_errors
 {
@@ -72,11 +74,9 @@ typedef enum	e_keycodes
 struct	s_flags
 {
 	int		player;
-	int		enemy;
 	int		collectible;
 	int		exit;
 	char	is_wall;
-//	int 	empty;
 };
 
 struct	s_map
@@ -119,7 +119,8 @@ void			ft_init_game(struct s_map *map);
 int				ft_exit(struct s_game *sl, enum e_errors err);
 void			ft_put_img(struct s_game *sl, void *sprite, int pos);
 void			ft_draw(struct s_game *sl);
-void			ft_draw_sprites(struct s_game *sl);
+int				ft_draw_sprites(struct s_game *sl);
 int				ft_is_obstacle(char c);
+void			ft_lose(struct s_game *sl);
 int				ft_enemy_move(struct s_game *sl);
 #endif
