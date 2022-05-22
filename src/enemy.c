@@ -12,41 +12,7 @@
 
 #include "so_long.h"
 
-static int ft_compare(t_cell *e1, t_cell *e2)
-{
-	return (!e2 || (e1 && e1->all_way < e2->all_way) || !(e1 || e2));
-}
 
-static int	ft_mod(long x)
-{
-	if (x < 0)
-		return (-x);
-	return (x);
-}
-
-int ft_pos_dif(const struct s_map *map, int pos1, int pos2)
-{
-	return (ft_mod(pos1 / map->length - pos2 / map->length) +
-			ft_mod(pos1 % map->length - pos2 % map->length));
-}
-
-int	ft_is_obstacle(char c)
-{
-	return (c == WALL || c == ENEMY || c == COLLECTIBLE || c == EXIT);
-}
-
-
-t_cell *ft_qu_check(t_cell **lst, int key, int new_way)
-{
-	t_cell	*tmp;
-
-	tmp = ft_qu_find(*lst, key);
-	if (tmp && tmp->beg_way > new_way)
-	{
-		return (ft_qu_del(lst, key));
-	}
-	return (NULL);
-}
 
 /*OPEN = priority queue containing START
 CLOSED = empty set
@@ -68,7 +34,7 @@ reconstruct reverse path from goal to start
 by following parent pointers*/
 
 
-t_cell	*ft_check_lists
+static t_cell	*ft_check_lists
 			(t_cell **open, t_cell **closed, int pos, int way)
 {
 	t_cell	*tmp;
@@ -79,8 +45,7 @@ t_cell	*ft_check_lists
 	return (tmp);
 }
 
-
-enum e_errors	ft_check_neighbours(struct s_game *sl, t_cell *elem,
+static enum e_errors	ft_check_neighbours(struct s_game *sl, t_cell *elem,
 		t_cell **open, t_cell **closed)
 {
 	int		i;
@@ -110,7 +75,7 @@ enum e_errors	ft_check_neighbours(struct s_game *sl, t_cell *elem,
 	return (NO_ERROR);
 }
 
-enum e_errors	ft_a_star(struct s_game *sl, t_cell **open, t_cell **closed)
+static enum e_errors	ft_a_star(struct s_game *sl, t_cell **open, t_cell **closed)
 {
 	t_cell			*cur;
 	enum e_errors	err;
@@ -129,7 +94,7 @@ enum e_errors	ft_a_star(struct s_game *sl, t_cell **open, t_cell **closed)
 	return (err);
 }
 
-t_cell	*ft_form_path(t_cell *end, t_cell **lst)
+static t_cell	*ft_form_path(t_cell *end, t_cell **lst)
 {
 	t_cell	*new_path;
 
@@ -142,7 +107,6 @@ t_cell	*ft_form_path(t_cell *end, t_cell **lst)
 	}
 	return (new_path);
 }
-
 
 t_cell	*ft_path_count(struct s_game *sl)
 {
@@ -165,31 +129,4 @@ t_cell	*ft_path_count(struct s_game *sl)
 	ft_qu_free(&open);
 	ft_qu_free(&closed);
 	return (path);
-}
-
-int ft_enemy_move(struct s_game *sl)
-{
-	static int	count;
-	t_cell		*elem;
-
-	if (count == ENEMY_INTERVAL)
-		count = 0;
-	if (!count)
-	{
-		if (sl->map->cur_pl_pos != sl->map->plr_pos)
-			ft_qu_free(&sl->enm_path);
-		if (!sl->enm_path)
-			sl->enm_path = ft_path_count(sl);
-		if (sl->enm_path->pos == sl->map->plr_pos)
-			ft_lose(sl);
-		sl->map->field[sl->map->enm_pos] = '0';
-		sl->map->field[sl->enm_path->pos] = 'X';
-		sl->map->enm_pos = sl->enm_path->pos;
-		elem = sl->enm_path;
-		sl->enm_path = sl->enm_path->next;
-		printf("free %d\n", elem->pos);
-		free(elem);
-	}
-	++count;
-	return (0);
 }

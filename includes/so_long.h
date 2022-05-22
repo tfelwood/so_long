@@ -1,6 +1,14 @@
-//
-// Created by Themis Felwood on 3/21/22.
-//
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   so_long.h                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tfelwood <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/05/22 20:40:31 by tfelwood          #+#    #+#             */
+/*   Updated: 2022/05/22 20:40:33 by tfelwood         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #ifndef SO_LONG_H
 # define SO_LONG_H
@@ -8,7 +16,7 @@
 # include <stdlib.h>
 # include <stdio.h>
 # include <fcntl.h>
-# include "mlx.h"
+# include "../mlx/mlx.h"
 # include "queue.h"
 # include <time.h>
 
@@ -28,7 +36,6 @@
 # define EXT ".xpm"
 # define INTERVAL 10
 # define ENEMY_INTERVAL 60
-
 
 enum	e_errors
 {
@@ -58,7 +65,7 @@ enum	e_images
 	ENEMY_IM,
 };
 
-typedef enum	e_keycodes
+typedef enum e_keycodes
 {
 	ESC				= 0x35,
 	L_ARROW			= 0x7B,
@@ -69,7 +76,7 @@ typedef enum	e_keycodes
 	KEY_A			= 0x00,
 	KEY_S			= 0x01,
 	KEY_D			= 0x02,
-} t_keycodes;
+}	t_keycodes;
 
 struct	s_flags
 {
@@ -85,9 +92,9 @@ struct	s_map
 	int				length;
 	struct s_flags	flags;
 	char			*field;
-	int 			plr_pos;
-	int 			enm_pos;
-	int 			cur_pl_pos;
+	int				plr_pos;
+	int				enm_pos;
+	int				cur_pl_pos;
 };
 
 struct s_game
@@ -96,12 +103,15 @@ struct s_game
 	size_t			move;
 	void			*mlx_ptr;
 	void			*mlx_win_ptr;
-	int 			cur_sprite;
+	int				cur_sprite;
 	void			*mlx_img[IMG_NUM];
 	void			*spr_img[SPR_NUM];
 	t_cell			*enm_path;
 };
 
+int				ft_map_symbol_check(char c);
+t_cell			*ft_qu_check(t_cell **lst, int key, int new_way);
+int				ft_compare(t_cell *e1, t_cell *e2);
 void			ft_putstr_fd(const char *s, int fd);
 int				ft_strlen(const char *str);
 void			*ft_memset(void *b, int c, size_t len);
@@ -114,13 +124,13 @@ int				ft_check_errors(enum e_errors err);
 enum e_errors	ft_input(int fd, struct s_map *map);
 enum e_errors	ft_init_mlx(struct s_game *sl);
 void			ft_mlx_free(struct s_game *sl);
-int				ft_enemy_place (struct s_game *sl);
+int				ft_enemy_place(struct s_game *sl);
 void			ft_init_game(struct s_map *map);
 int				ft_exit(struct s_game *sl, enum e_errors err);
 void			ft_put_img(struct s_game *sl, void *sprite, int pos);
 void			ft_draw(struct s_game *sl);
 int				ft_draw_sprites(struct s_game *sl);
 int				ft_is_obstacle(char c);
-void			ft_lose(struct s_game *sl);
+void			ft_move(struct s_game *sl, int new_pos);
 int				ft_enemy_move(struct s_game *sl);
 #endif

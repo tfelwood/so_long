@@ -10,6 +10,10 @@ SRCS		=	main.c\
 				enemy.c\
 				random.c\
 				queue.c\
+				bool_func.c\
+				cell.c\
+				enemy_utils.c\
+				game_events.c
 
 MLX_F		= font.c font.xcf mlx_init_loop.m \
               mlx_int.h mlx_int_str_to_wordtab.c mlx_mouse.m \

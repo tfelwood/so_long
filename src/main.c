@@ -1,44 +1,16 @@
-#include "so_long.h"
-#include <stdio.h>
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tfelwood <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/05/22 20:31:08 by tfelwood          #+#    #+#             */
+/*   Updated: 2022/05/22 20:31:10 by tfelwood         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-//int main()
-//{
-//	void	*window;
-//	void	*mlx_instance;
-//	void	*mlx_image;
-//	void	*mlx_image2;
-//	void	*mlx_image3;
-//	void	*mlx_image4;
-//	int width;
-//	int height;
-//	int width2;
-//	int height2;
-//	int width3;
-//	int height3;
-//
-//	mlx_instance = mlx_init();
-//	window = mlx_new_window(mlx_instance, 1000, 1000, "Walhalla!");
-//	mlx_image = mlx_xpm_file_to_image(mlx_instance, "./test_textures/water/100/0000.xpm", &width, &height);
-//
-//	mlx_image4 = mlx_xpm_file_to_image(mlx_instance, "./test_textures/fish3_100.xpm", &width3, &height3);
-//	mlx_image3 = mlx_xpm_file_to_image(mlx_instance, "./test_textures/corals3100.xpm", &width2, &height2);
-//	mlx_put_image_to_window(mlx_instance, window, mlx_image, 0, 0);
-//	mlx_put_image_to_window(mlx_instance, window, mlx_image3, 0, 0);
-////	mlx_put_image_to_window(mlx_instance, window, mlx_image2, width, 0);
-//	mlx_put_image_to_window(mlx_instance, window, mlx_image, width, height);
-//	mlx_put_image_to_window(mlx_instance, window, mlx_image, width, 0);
-//	mlx_put_image_to_window(mlx_instance, window, mlx_image4, width, height);
-//	mlx_put_image_to_window(mlx_instance, window, mlx_image3, width, 0);
-//	//mlx_put_image_to_window(mlx_instance, window, mlx_image, width * 2, 0);
-////	mlx_put_image_to_window(mlx_instance, window, mlx_image2, 0, height);
-////	mlx_put_image_to_window(mlx_instance, window, mlx_image2, 0, height * 2);
-//	printf("%d\n", width);
-//	printf("%d\n", height);
-//	mlx_loop(mlx_instance);
-//	//mlx_destroy_image(mlx_instance, mlx_image);
-//	//mlx_destroy_window(mlx_instance, window);
-//	return 0;
-//}
+#include "so_long.h"
 
 enum e_errors	ft_check_file_format(const char *filename)
 {

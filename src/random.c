@@ -6,7 +6,7 @@
 /*   By: tfelwood <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/03 18:16:50 by tfelwood          #+#    #+#             */
-/*   Updated: 2022/05/16 14:00:34 by tfelwood         ###   ########.fr       */
+/*   Updated: 2022/05/22 20:32:10 by tfelwood         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,13 +36,13 @@ int	ft_place_rand(struct s_game *sl,
 	int		*field;
 	int 	pos;
 
-	count = (sl->map->length - 2) * sl->map->width;
+	count = (sl->map->width - 2) * sl->map->length;
 	field = (int *)malloc(count * sizeof(int));
 	if (!field)
 		ft_exit(sl, BAD_ALLOC);
 	while (count--)
 		field[count] = count + sl->map->length;
-	count = (sl->map->length - 2) * sl->map->width;
+	count = (sl->map->width - 2) * sl->map->length;
 	while (count)
 	{
 		pos = rand() % count;

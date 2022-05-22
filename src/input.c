@@ -1,15 +1,17 @@
-
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   input.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tfelwood <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/05/22 20:30:45 by tfelwood          #+#    #+#             */
+/*   Updated: 2022/05/22 20:30:49 by tfelwood         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "so_long.h"
 #include "get_next_line.h"
-
-static int ft_map_symbol_check(char c)
-{
-	if (c == PLAYER || c == EXIT || c == WALL || c == COLLECTIBLE
-		|| c == SPACE)
-		return (1);
-	return (0);
-}
 
 static void	ft_flags_proc(char c, int pos, struct s_map *map)
 {
@@ -80,7 +82,10 @@ static enum e_errors	ft_first_input(int fd, struct s_map *map, char **line)
 	if (error == NO_ERROR && !map->flags.is_wall)
 		error = MAP_BAD_WALLS;
 	if (error)
+	{
 		free(*line);
+		*line = NULL;
+	}
 	return (error);
 }
 
@@ -97,6 +102,7 @@ enum e_errors	ft_input(int fd, struct s_map *map)
 		map->field = ft_strjoin(map->field, cur_str);
 		free (tmp);
 		free (cur_str);
+		cur_str = NULL;
 		if (map->field)
 		{
 			++map->width;
